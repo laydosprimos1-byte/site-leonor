@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block titulo %}Login{% endblock %}
+{% block conteudo %}
+<div class="glass-card">
+  <h1>Bem-vinda 💫</h1>
+  <p class="subtitulo">Entre com email ou telefone de Moçambique</p>
+  <form method="POST">
+    <input type="text" name="identificador" placeholder="Email ou telefone (84/85/86/87...)" required>
+    <input type="password" name="senha" placeholder="Senha" required>
+    <button class="btn-primario">Entrar</button>
+  </form>
+  <p class="rodape">
+    <a href="{{ url_for('recuperar') }}">Esqueci a senha</a> •
+    <a href="{{ url_for('cadastro') }}">Criar conta</a>
+  </p>
+</div>
+{% endblock %}

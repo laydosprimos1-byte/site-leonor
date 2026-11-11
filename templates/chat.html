@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block titulo %}Chat{% endblock %}
+{% block conteudo %}
+
+<div class="glass-card chat-wrap">
+  <h1>💬 Chat Interno</h1>
+  <p class="subtitulo">Converse com outros usuários do sistema</p>
+
+  <div class="chat-layout">
+    <aside class="chat-lista">
+      <h3>Utilizadores</h3>
+      {% for u in usuarios %}
+      <a href="{{ url_for('chat', uid=u['id']) }}"
+         class="user-item {% if destinatario and destinatario['id']==u['id'] %}ativo{% endif %}">
+        <img src="{{ url_for('static', filename='uploads/' + u['foto']) }}"
+             onerror="this.src='https://ui-avatars.com/api/?name={{u['nome']}}&background=2575fc&color=fff'">
+        <span>{{ u['nome'] }}</span>
+      </a>
+      {% endfor %}
+      {% if not usuarios %}
+        <p style="opacity:.7;font-size:.85rem">Nenhum outro utilizador registado.</p>
+      {% endif %}
+    </aside>
+
+    <section class="chat-area">
+      {% if destinatario %}
+        <div class="chat-header"><strong>{{ destinatario['nome'] }}</strong></div>
+        <div class="chat-msgs" id="chat-msgs">
+          {% for m in mensagens %}
+            <div class="msg {% if m['remetente_id']==session['user_id'] %}minha{% else %}outra{% endif %}">
+              <p>{{ m['texto'] }}</p>
+              <small>{{ m['enviado_em'] }}</small>
+            </div>
+          {% endfor %}
+        </div>
+        <form class="chat-form" onsubmit="enviarMensagem(event)">
+          <input type="text" id="texto-msg" placeholder="Escreve uma mensagem..." autocomplete="off" required>
+          <button class="btn-primario" type="submit">Enviar</button>
+        </form>
+      {% else %}
+        <p style="text-align:center;opacity:.7;padding:40px 0">
+          Escolha um utilizador para conversar 💬
+        </p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const DEST = {{ destinatario['id'] if destinatario else 'null' }};
+const MEU_ID = {{ session['user_id'] }};
+const msgsBox = document.getElementById('chat-msgs');
+function scrollFim(){ if(msgsBox) msgsBox.scrollTop = msgsBox.scrollHeight; }
+scrollFim();
+async function enviarMensagem(e){
+  e.preventDefault();
+  const inp = document.getElementById('texto-msg');
+  const txt = inp.value.trim();
+  if(!txt || !DEST) return;
+  inp.value = '';
+  await fetch('/api/enviar', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({destinatario: DEST, texto: txt})
+  });
+  carregar();
+}
+async function carregar(){
+  if(!DEST) return;
+  const r = await fetch('/api/mensagens/' + DEST);
+  const dados = await r.json();
+  if(!msgsBox) return;
+  msgsBox.innerHTML = dados.map(m => `
+    <div class="msg ${m.remetente_id===MEU_ID?'minha':'outra'}">
+      <p>${m.texto}</p>
+      <small>${m.enviado_em}</small>
+    </div>`).join('');
+  scrollFim();
+}
+if(DEST) setInterval(carregar, 3000);
+</script>
+{% endblock %}

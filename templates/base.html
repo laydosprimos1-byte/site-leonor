@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block titulo %}Leonor Maquina{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="fundo-animado">
+
+{% if session.user_id %}
+<nav class="topbar">
+  <div class="logo">💫 Leonor</div>
+  <div class="menu-dropdown">
+    <button class="menu-btn">☰ Menu</button>
+    <div class="menu-conteudo">
+      <a href="{{ url_for('perfil') }}">👤 Perfil</a>
+      <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+      <a href="{{ url_for('storage') }}">☁️ Storage</a>
+      <a href="{{ url_for('chat') }}">💬 Chat
+        {% if nao_lidas and nao_lidas > 0 %}<span class="badge">{{ nao_lidas }}</span>{% endif %}
+      </a>
+      <a href="{{ url_for('perfil') }}#habilidades">🎓 Habilidades</a>
+      <a href="{{ url_for('perfil') }}#redes">🌐 Redes</a>
+      <hr>
+      <a href="{{ url_for('logout') }}" class="sair">🚪 Sair</a>
+    </div>
+  </div>
+  <div class="theme-toggle-inline" onclick="toggleTema()">🌙</div>
+</nav>
+{% else %}
+<div class="theme-toggle" onclick="toggleTema()">🌙</div>
+{% endif %}
+
+<div class="container">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}<div class="flash {{cat}}">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block conteudo %}{% endblock %}
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block titulo %}Meu Perfil{% endblock %}
+{% block conteudo %}
+
+<div class="glass-card perfil-card">
+  <div class="foto-area">
+    <img src="{{ url_for('static', filename='uploads/' + user['foto']) }}"
+         onerror="this.src='https://ui-avatars.com/api/?name={{user['nome']}}&background=6a11cb&color=fff&size=200'"
+         class="foto-perfil" alt="Foto">
+    <form method="POST" action="{{ url_for('upload_foto') }}" enctype="multipart/form-data" class="form-foto">
+      <label for="foto" class="btn-foto">📷 Trocar foto</label>
+      <input type="file" id="foto" name="foto" accept="image/*" onchange="this.form.submit()" hidden>
+    </form>
+  </div>
+  <h1>{{ user['nome'] }}</h1>
+  <p class="subtitulo">{{ user['email'] }} • +258 {{ user['telefone'] }}</p>
+
+  <form method="POST" action="{{ url_for('atualizar_perfil') }}" class="form-editar">
+    <input type="text" name="nome" value="{{ user['nome'] }}" placeholder="Nome">
+    <input type="email" name="email" value="{{ user['email'] }}" placeholder="Email">
+    <input type="tel" name="telefone" value="{{ user['telefone'] }}" placeholder="Telefone">
+    <textarea name="bio" placeholder="Biografia">{{ user['bio'] or '' }}</textarea>
+    <button class="btn-primario">💾 Atualizar Perfil</button>
+  </form>
+</div>
+
+<div class="glass-card">
+  <h2>📋 Informações Pessoais</h2>
+  <div class="grid-info">
+    <div class="info-item"><span>Nome</span><strong>Leonor Armando Maquina</strong></div>
+    <div class="info-item"><span>Nascimento</span><strong>30/12/1995</strong></div>
+    <div class="info-item"><span>Residência</span><strong>Pemba Cidade</strong></div>
+    <div class="info-item"><span>Bairro</span><strong>Cariacó</strong></div>
+    <div class="info-item"><span>Naturalidade</span><strong>Macomia</strong></div>
+    <div class="info-item"><span>Mãe</span><strong>Zaina Abdala</strong></div>
+    <div class="info-item"><span>Pai</span><strong>Armando Maquina</strong></div>
+  </div>
+</div>
+
+<div class="glass-card" id="habilidades">
+  <h2>🎓 Escolaridade & Habilidades</h2>
+  <div class="habilidades">
+    <div class="hab"><span>💻 Informática Básica</span><div class="barra"><div style="width:90%"></div></div></div>
+    <div class="hab"><span>🌐 Web Design (HTML/CSS/JS)</span><div class="barra"><div style="width:80%"></div></div></div>
+    <div class="hab"><span>🐍 Python / Programação</span><div class="barra"><div style="width:75%"></div></div></div>
+    <div class="hab"><span>📊 Excel / Word</span><div class="barra"><div style="width:85%"></div></div></div>
+    <div class="hab"><span>🗣️ Português & Inglês</span><div class="barra"><div style="width:85%"></div></div></div>
+  </div>
+  <h3>Formação</h3>
+  <ul class="lista-formacao">
+    <li>🎓 Ensino Secundário Completo — Escola Secundária de Pemba</li>
+    <li>💻 Curso de Informática — Centro de Formação</li>
+    <li>🌍 Formação em Línguas — Inglês Intermédio</li>
+  </ul>
+</div>
+
+<div class="glass-card" id="redes">
+  <h2>🌐 Minhas Redes Sociais</h2>
+  <div class="redes">
+    <a href="https://wa.me/258864457008" target="_blank" class="rede whatsapp">💬 WhatsApp<br><small>+258 86 445 7008</small></a>
+    <a href="https://facebook.com/LayDosPrimos" target="_blank" class="rede facebook">📘 Facebook<br><small>Lay Dos Primos</small></a>
+    <a href="https://instagram.com/laydosprimos1" target="_blank" class="rede instagram">📸 Instagram<br><small>@laydosprimos1</small></a>
+  </div>
+</div>
+
+{% endblock %}

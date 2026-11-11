@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %}Nova Senha{% endblock %}
+{% block conteudo %}
+<div class="glass-card">
+  <h1>🔐 Definir Nova Senha</h1>
+  <form method="POST">
+    <input type="password" name="senha" placeholder="Nova senha (mín 6)" required>
+    <input type="password" name="confirma" placeholder="Confirmar nova senha" required>
+    <button class="btn-primario">Salvar Nova Senha</button>
+  </form>
+</div>
+{% endblock %}

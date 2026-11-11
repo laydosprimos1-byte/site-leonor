@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+venv/
+.env
+banco.db
+banco_backup.db__pycache__/
+*.pyc
+banco.db
+static/uploads/*
+!static/uploads/.gitkeep
+banco_backup.db
+*.db
+.env
+__pycache__/
+

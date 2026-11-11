@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Storage{% endblock %}
+{% block conteudo %}
+
+<div class="glass-card">
+  <h1>☁️ Meu Storage na Nuvem</h1>
+  <p class="subtitulo">Faça upload de fotos, documentos e arquivos pessoais</p>
+  <form method="POST" enctype="multipart/form-data" class="form-upload">
+    <label for="arquivos" class="dropzone">
+      <span>📤 Clique ou arraste arquivos aqui</span>
+      <small>Imagens, PDF, Word, TXT, MP3, MP4</small>
+    </label>
+    <input type="file" id="arquivos" name="arquivos" multiple
+           accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx,.txt,.mp3,.mp4"
+           onchange="mostrarSelecionados(this)" hidden>
+    <div id="lista-selecionados"></div>
+    <button class="btn-primario">🚀 Enviar para Nuvem</button>
+  </form>
+</div>
+
+<div class="glass-card">
+  <h2>📁 Meus Arquivos ({{ arquivos|length }})</h2>
+  {% if arquivos %}
+  <div class="grid-arquivos">
+    {% for a in arquivos %}
+    <div class="arquivo">
+      {% if a['tipo'] in ['png','jpg','jpeg','gif','webp'] %}
+        <img src="{{ url_for('static', filename='uploads/' + a['nome_arquivo']) }}">
+      {% elif a['tipo'] == 'mp4' %}
+        <video src="{{ url_for('static', filename='uploads/' + a['nome_arquivo']) }}" muted></video>
+      {% else %}
+        <div class="icone">📄</div>
+      {% endif %}
+      <div class="info">
+        <strong>{{ a['nome_original'][:20] }}</strong>
+        <small>{{ (a['tamanho']/1024)|round(1) }} KB • {{ a['enviado_em'] }}</small>
+      </div>
+      <div class="acoes">
+        <a href="{{ url_for('static', filename='uploads/' + a['nome_arquivo']) }}" download>⬇️</a>
+        <a href="{{ url_for('deletar_arquivo', aid=a['id']) }}" onclick="return confirm('Apagar?')">🗑️</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p style="text-align:center;opacity:.7">Nenhum arquivo ainda. Faça seu primeiro upload! 🚀</p>
+  {% endif %}
+</div>
+
+{% endblock %}

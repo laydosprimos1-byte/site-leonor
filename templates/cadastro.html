@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block titulo %}Criar Conta{% endblock %}
+{% block conteudo %}
+<div class="glass-card">
+  <h1>Criar Conta ✨</h1>
+  <p class="subtitulo">Sistema Moçambique 🇲🇿</p>
+  <form method="POST">
+    <input type="text" name="nome" placeholder="Nome completo" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="tel" name="telefone" placeholder="Telefone: 84/85/86/87XXXXXXX" required>
+    <input type="password" name="senha" placeholder="Senha (mín 6)" required>
+    <input type="password" name="confirma" placeholder="Confirmar senha" required>
+    <button class="btn-primario">Registrar</button>
+  </form>
+  <p class="rodape">Já tem conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+</div>
+{% endblock %}
